@@ -1,6 +1,6 @@
 import streamlit as st
 from components.sidebar import sidebar
-from utils import parse_docx, parse_pdf, parse_txt, count_tokens
+from utils import parse_docx, parse_pdf, parse_txt, count_tokens, parse_xlsx
 
 
 st.set_page_config(
