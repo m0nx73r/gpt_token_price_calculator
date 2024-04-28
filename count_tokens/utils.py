@@ -38,8 +38,20 @@ def parse_txt(file: BytesIO) -> str:
 
 def parse_xlsx(file: BytesIO) -> str:
     df = pd.read_excel(file)  # Read the Excel file into a pandas DataFrame
-    # Assuming the data is in a single column (e.g., 'text') of the DataFrame
-    text = ' '.join(df['text'].astype(str))  # Join all rows in the 'text' column into a single string
+
+    # Find the first column containing text data
+    text_column = None
+    for col in df.columns:
+        if df[col].apply(lambda x: isinstance(x, str)).any():
+            text_column = col
+            break
+
+    if text_column is None:
+        raise ValueError("No column with text data found in the Excel file")
+
+    # Join all rows in the text column into a single string
+    text = ' '.join(df[text_column].astype(str))
+
     # Remove extra spaces and newlines
     text = re.sub(r"\s*\n\s*", " ", text)
     return text
