@@ -17,8 +17,8 @@ def clear_submit():
 
 uploaded_file = st.file_uploader(
     "Upload a pdf, docx, or txt file",
-    type=["pdf", "docx", "txt"],
-    help="Only support pdf, docx, and txt format!",
+    type=["pdf", "docx", "txt", "xlsx"],
+    help="Only support pdf, docx, excel and txt format!",
     on_change=clear_submit,
 )
 
@@ -32,6 +32,8 @@ if uploaded_file is not None:
         doc = parse_docx(uploaded_file)
     elif uploaded_file.name.endswith(".txt"):
         doc = parse_txt(uploaded_file)
+    elif uploaded_file.name.endswith(".xlsx"):
+        doc = parse_xlsx(uploaded_file)
     else:
         raise ValueError("File type not supported!")
 
