@@ -56,6 +56,26 @@ def parse_xlsx(file: BytesIO) -> str:
     text = re.sub(r"\s*\n\s*", " ", text)
     return text
 
+def parse_csv(file: BytesIO) -> str:
+    df = pd.read_csv(file)  # Read the CSV file into a pandas DataFrame
+
+    # Find the first column containing text data
+    text_column = None
+    for col in df.columns:
+        if df[col].apply(lambda x: isinstance(x, str)).any():
+            text_column = col
+            break
+
+    if text_column is None:
+        raise ValueError("No column with text data found in the CSV file")
+
+    # Join all rows in the text column into a single string
+    text = ' '.join(df[text_column].astype(str))
+
+    # Remove extra spaces and newlines
+    text = re.sub(r"\s*\n\s*", " ", text)
+    return text
+
 def count_tokens(text: str) -> Tuple[str, int]:
     model = st.session_state.get("MODEL")
     prompt = st.session_state.get("PROMPT")
