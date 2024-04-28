@@ -37,20 +37,27 @@ def parse_txt(file: BytesIO) -> str:
     return text
 
 def parse_xlsx(file: BytesIO) -> str:
-    df = pd.read_excel(file)  # Read the Excel file into a pandas DataFrame
+    text = ""
 
-    # Find the first column containing text data
-    text_column = None
-    for col in df.columns:
-        if df[col].apply(lambda x: isinstance(x, str)).any():
-            text_column = col
-            break
+    # Load all sheets from the Excel file into a dictionary of DataFrames
+    sheets = pd.read_excel(file, sheet_name=None)
 
-    if text_column is None:
-        raise ValueError("No column with text data found in the Excel file")
+    for sheet_name, df in sheets.items():
+        # Find the first column containing text data in the current sheet
+        text_column = None
+        for col in df.columns:
+            if df[col].apply(lambda x: isinstance(x, str)).any():
+                text_column = col
+                break
 
-    # Join all rows in the text column into a single string
-    text = ' '.join(df[text_column].astype(str))
+        if text_column is not None:
+            # Join all rows in the text column into a single string
+            sheet_text = ' '.join(df[text_column].astype(str))
+            # Append sheet text to the overall text
+            text += sheet_text + " "
+
+    if not text.strip():
+        raise ValueError("No sheet with text data found in the Excel file")
 
     # Remove extra spaces and newlines
     text = re.sub(r"\s*\n\s*", " ", text)
