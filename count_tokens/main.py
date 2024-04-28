@@ -34,7 +34,7 @@ if uploaded_file is not None:
         doc = parse_txt(uploaded_file)
     elif uploaded_file.name.endswith(".xlsx"):
         doc = parse_xlsx(uploaded_file)
-    elif uploaded_file.name.endswith(".xlsx"):
+    elif uploaded_file.name.endswith(".csv"):
         doc = parse_csv(uploaded_file)
     else:
         raise ValueError("File type not supported!")
