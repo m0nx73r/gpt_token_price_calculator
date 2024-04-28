@@ -1,5 +1,5 @@
 <h1 align="center">
-🧮GPT Token Price Calculator
+🧮GPT Token Price Calculator [supports CSV and EXCEL]
 </h1>
 
 Calculate tokens and estimate the price for the **File** ➕ **Prompt** fed into the GPT model.
