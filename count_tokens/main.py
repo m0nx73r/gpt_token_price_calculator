@@ -1,6 +1,6 @@
 import streamlit as st
 from components.sidebar import sidebar
-from utils import parse_docx, parse_pdf, parse_txt, count_tokens, parse_xlsx
+from utils import parse_docx, parse_pdf, parse_txt, count_tokens, parse_xlsx, parse_csv
 
 
 st.set_page_config(
@@ -17,7 +17,7 @@ def clear_submit():
 
 uploaded_file = st.file_uploader(
     "Upload a pdf, docx, or txt file",
-    type=["pdf", "docx", "txt", "xlsx"],
+    type=["pdf", "docx", "txt", "xlsx", "csv"],
     help="Only support pdf, docx, excel and txt format!",
     on_change=clear_submit,
 )
@@ -34,6 +34,8 @@ if uploaded_file is not None:
         doc = parse_txt(uploaded_file)
     elif uploaded_file.name.endswith(".xlsx"):
         doc = parse_xlsx(uploaded_file)
+    elif uploaded_file.name.endswith(".xlsx"):
+        doc = parse_csv(uploaded_file)
     else:
         raise ValueError("File type not supported!")
 
